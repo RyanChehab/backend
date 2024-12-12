@@ -85,8 +85,17 @@ class JWTAuthController extends Controller{
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function delete_user(){
-        
+    public function delete_user(Request $request){
+        try{
+            $request->validate([
+                'email' => 'required|string|email|max:255',
+                'password' => 'required|string|min:6',
+            ]);
+        }catch(\Illuminate\Validation\ValidationException $e){
+            return response()->json([
+                'errors' => $e->errors()
+            ]);
+        };
     }
     
 }
