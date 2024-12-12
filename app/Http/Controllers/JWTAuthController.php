@@ -12,15 +12,23 @@ class JWTAuthController extends Controller{
 
     public function login(Request $request){
         //Validating the request
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
-
+        try{
+            $credentials = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+            ]);
+        }catch(\Illuminate\Validation\ValidationException $e){
+            return response()->json([
+                'errors' => $e->errors()
+            ]);
+        };
+        
+        // comparing credentials
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
-
+        
+        // responding
         return response()->json([
             'token' => $token,
             'user' => JWTAuth::user(),
@@ -33,12 +41,13 @@ class JWTAuthController extends Controller{
                 'name' => 'required|string|max:255',
                 'username' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
+                'user_type'=>'required',
                 'password' => 'required|string|min:6',
                ]);
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json(['errors' => $e->errors()], 422);
         }
-        
+
            $emailExists = User::where('email',$request->email)->exists();
            
            if($emailExists){
@@ -51,6 +60,7 @@ class JWTAuthController extends Controller{
            $user->name =$request->name;
            $user->username =$request->username;
            $user->email =$request->email;
+           $user->user_type =$request->user_type;
            $user->password = Hash::make($request->password);
     
            $user->save();
