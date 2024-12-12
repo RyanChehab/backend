@@ -24,43 +24,46 @@ class JWTAuthController extends Controller{
         return response()->json([
             'token' => $token,
             'user' => JWTAuth::user(),
-        ]);
+        ],201);
     }
 
     public function signup(Request $request){
-        $request->validate([
-         'name' => 'required|string|max:255',
-         'username' => 'required|string|max:255',
-         'email' => 'required|string|email|max:255',
-         'password' => 'required|string|min:6',
-        ]);
-
-        $emailExists = User::where('email',$request->email)->exists();
-       
-        if($emailExists){
-         return response()->json([
-             "message" => 'User already registered'
-         ],409);
+        try{
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'username' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'password' => 'required|string|min:6',
+               ]);
+        }catch(\Illuminate\Validation\ValidationException $e){
+            return response()->json(['errors' => $e->errors()], 422);
         }
-
-        $user = new User();
-
-       $user->name =$request->name;
-       $user->username =$request->username;
-       $user->email =$request->email;
-       $user->password = Hash::make($request->password);
-
-       $user->save();
-       //generating jwt 
-       $token = JWTAuth::fromUser($user);
-
-       return response()->json([
-        'message' => 'User successfully registered',
-        'user' => $user,
-        'token' => $token,
-    ], 201); 
-
-    }
+        
+           $emailExists = User::where('email',$request->email)->exists();
+           
+           if($emailExists){
+            return response()->json([
+                "message" => 'User already registered'
+            ],409);
+           }
+           $user = new User();
+    
+           $user->name =$request->name;
+           $user->username =$request->username;
+           $user->email =$request->email;
+           $user->password = Hash::make($request->password);
+    
+           $user->save();
+           //generating jwt 
+           $token = JWTAuth::fromUser($user);
+    
+           return response()->json([
+            'message' => 'User successfully registered',
+            'user' => $user,
+            'token' => $token,
+        ], 201);
+        
+     }
 
     public function logout(){
         JWTAuth::invalidate(JWTAuth::getToken());
