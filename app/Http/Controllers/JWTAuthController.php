@@ -27,7 +27,7 @@ class JWTAuthController extends Controller{
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
-        
+
         // responding
         return response()->json([
             'token' => $token,
@@ -47,31 +47,35 @@ class JWTAuthController extends Controller{
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json(['errors' => $e->errors()], 422);
         }
+        
+        // checking if user already registered 
+        $emailExists = User::where('email',$request->email)->exists();
+        
+        if($emailExists){
+        return response()->json([
+            "message" => 'User already registered'
+        ],409);
+        }
 
-           $emailExists = User::where('email',$request->email)->exists();
-           
-           if($emailExists){
-            return response()->json([
-                "message" => 'User already registered'
-            ],409);
-           }
-           $user = new User();
-    
-           $user->name =$request->name;
-           $user->username =$request->username;
-           $user->email =$request->email;
-           $user->user_type =$request->user_type;
-           $user->password = Hash::make($request->password);
-    
-           $user->save();
-           //generating jwt 
-           $token = JWTAuth::fromUser($user);
-    
-           return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user,
-            'token' => $token,
-        ], 201);
+        // new user creation
+        $user = new User();
+
+        $user->name =$request->name;
+        $user->username =$request->username;
+        $user->email =$request->email;
+        $user->user_type =$request->user_type;
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        //generating jwt 
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json([
+        'message' => 'User successfully registered',
+        'user' => $user,
+        'token' => $token,
+    ], 201);
         
      }
 
@@ -79,6 +83,10 @@ class JWTAuthController extends Controller{
         JWTAuth::invalidate(JWTAuth::getToken());
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function delete_user(){
+        
     }
     
 }
