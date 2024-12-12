@@ -41,5 +41,18 @@ class JWTAuthController extends Controller{
          ],409);
         }
 
+        $user = new User();
+
+       $user->name =$request->name;
+       $user->username =$request->username;
+       $user->email =$request->email;
+       $user->password = Hash::make($request->password);
+
+       $user->save();
+       //generating jwt 
+       $token = JWTAuth::fromUser($user);
+
+       
+
     }
 }
