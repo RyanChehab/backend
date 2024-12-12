@@ -107,5 +107,13 @@ class JWTAuthController extends Controller{
         }
 
     }
+
+    public function block_user(Request $request){
+        $request->validate([
+            'email'=> 'required|email',
+            'password'=> 'required|string'
+        ]);
+
+    }
     
 }
