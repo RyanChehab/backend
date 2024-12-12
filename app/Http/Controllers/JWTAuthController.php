@@ -16,6 +16,7 @@ class JWTAuthController extends Controller{
             $credentials = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required|min:6',
+                'blocked' => 'false',
             ]);
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json([
@@ -26,6 +27,13 @@ class JWTAuthController extends Controller{
         // comparing credentials
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+
+        $user = User::where('email',$request->email)->first(); 
+        if($user->blocked=== '1'){
+            return response()->json([
+                'message' => 'user blocked'
+            ],403);
         }
 
         // responding
