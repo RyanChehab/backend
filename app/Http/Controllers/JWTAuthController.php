@@ -33,5 +33,13 @@ class JWTAuthController extends Controller{
          'password' => 'required|string|min:6',
         ]);
 
+        $emailExists = User::where('email',$request->email)->exists();
+       
+        if($emailExists){
+         return response()->json([
+             "message" => 'User already registered'
+         ],409);
+        }
+
     }
 }
