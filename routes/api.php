@@ -8,3 +8,7 @@ use App\Http\Controllers\JWTAuthController;
 Route::post('/signup',[JWTAuthController::class, 'signup']);
 
 Route::post('/login',[JWTAuthController::class, 'login']);
+
+Route::middleware(JWTMiddleware::class)->group(function(){
+    Route::post('/logout',[JWTAuthController::class, 'logout']);
+});
