@@ -82,7 +82,7 @@ class JWTAuthController extends Controller{
     public function logout(){
         JWTAuth::invalidate(JWTAuth::getToken());
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Successfully logged out'],200);
     }
 
     public function delete_user(Request $request){
@@ -94,7 +94,7 @@ class JWTAuthController extends Controller{
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json([
                 'errors' => $e->errors()
-            ]);
+            ],500);
         };
 
         $user = User::where('email',$request->email)->first();
@@ -103,11 +103,11 @@ class JWTAuthController extends Controller{
             $user->delete();
             return response()->json([
                 'message'=>'user deleted successfully'
-            ]);
+            ],200);
         }else{
             return response()->json([
                 'message'=>'incorrect password'
-            ]);
+            ],401);
         }
 
     }
@@ -122,6 +122,14 @@ class JWTAuthController extends Controller{
         if(Hash::check($request->password,$user->password)){
             $user->blocked= true;
             $user->save();
+            return response()->json([
+                'message'=>'User blocked'
+            ],200);
+
+        }else{
+            return response()->json([
+                'message'=>'incorrect password'
+            ],401);
         }
 
     }
