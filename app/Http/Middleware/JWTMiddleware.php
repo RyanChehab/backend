@@ -15,6 +15,14 @@ class JWTMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        try{
+            
+            $user = JWTAuth::parseToken()->authenticate();
+        }catch(JWTException $error){
+
+            return response()->json(['error' => 'token is invalid'],401);
+        }
+        
         return $next($request);
     }
 }
