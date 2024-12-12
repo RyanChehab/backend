@@ -96,6 +96,16 @@ class JWTAuthController extends Controller{
                 'errors' => $e->errors()
             ]);
         };
+
+        $user = User::where('email',$request->email)->first();
+
+        if (Hash::check($request->password, $user->password)){
+            $user->delete();
+            return response()->json([
+                'message'=>'user deleted successfully'
+            ]);
+        }
+
     }
     
 }
