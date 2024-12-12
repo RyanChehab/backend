@@ -104,6 +104,10 @@ class JWTAuthController extends Controller{
             return response()->json([
                 'message'=>'user deleted successfully'
             ]);
+        }else{
+            return response()->json([
+                'message'=>'incorrect password'
+            ]);
         }
 
     }
@@ -113,6 +117,12 @@ class JWTAuthController extends Controller{
             'email'=> 'required|email',
             'password'=> 'required|string'
         ]);
+
+        $user = User::where('email', $request->email)->first();
+        if(Hash::check($request->password,$user->password)){
+            $user->blocked= true;
+            $user->save();
+        }
 
     }
     
