@@ -6,3 +6,5 @@ use App\Http\Middleware\JWTMiddleware;
 use App\Http\Controllers\JWTAuthController;
 
 Route::post('/signup',[JWTAuthController::class, 'signup']);
+
+Route::post('/login',[JWTAuthController::class, 'login']);
