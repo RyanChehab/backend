@@ -15,5 +15,8 @@ class JWTAuthController extends Controller{
             'password' => 'required|min:6',
         ]);
 
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
     }
 }
