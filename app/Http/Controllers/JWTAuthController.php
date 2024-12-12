@@ -30,7 +30,7 @@ class JWTAuthController extends Controller{
         }
 
         $user = User::where('email',$request->email)->first(); 
-        if($user->blocked=== '1'){
+        if($user && $user->blocked){
             return response()->json([
                 'message' => 'user blocked'
             ],403);
