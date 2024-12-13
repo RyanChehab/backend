@@ -20,7 +20,15 @@ class AdminMiddleware{
                     'message'=>'Access denied. Admins only'
                 ],403);
             }
-        }catch
-        return $next($request);
+
+            return $next($request);
+            
+        }catch(JWTException $e){
+
+            return response()->json([
+            'message' => 'Invalid or expired token.',
+                'error' => $e->getMessage()
+            ], 401);
+        }
     }
 }
