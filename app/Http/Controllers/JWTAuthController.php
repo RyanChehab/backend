@@ -156,7 +156,7 @@ class JWTAuthController extends Controller{
     public function resetPassword(Request $request){
         $request->validate([
             'email'=>'required|email'
-        ])
+        ]);
 
         $user = User::where('email',$request->email)->first();
         
@@ -164,6 +164,8 @@ class JWTAuthController extends Controller{
             return response()->json(['message'=>"User not found"]);
         }
 
+        $token = bin2hex(random_bytes(32)); 
 
+        $expiresAt = Carbon::now()->addMinutes(15);
     }
 }
