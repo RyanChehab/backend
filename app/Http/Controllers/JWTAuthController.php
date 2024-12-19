@@ -157,6 +157,13 @@ class JWTAuthController extends Controller{
         $request->validate([
             'email'=>'required|email'
         ])
+
+        $user = User::where('email',$request->email)->first();
         
+        if(!$user){
+            return response()->json(['message'=>"User not found"]);
+        }
+
+
     }
 }
