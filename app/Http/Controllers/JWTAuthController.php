@@ -158,6 +158,7 @@ class JWTAuthController extends Controller{
         $request->validate([
             'email'=>'required|email'
         ]);
+        $user = new User();
 
         $user = User::where('email',$request->email)->first();
         
@@ -168,5 +169,11 @@ class JWTAuthController extends Controller{
         $token = bin2hex(random_bytes(32)); 
 
         $expiresAt = Carbon::now()->addMinutes(15);
+
+        // ~ 
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $request->email],
+            ['token' => Hash::make($token), 'expires_at' => $expiresAt, 'used' => false]
+        );
     }
 }
