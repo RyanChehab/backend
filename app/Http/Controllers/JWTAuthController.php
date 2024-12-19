@@ -20,7 +20,7 @@ class JWTAuthController extends Controller{
             ]);
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json([
-                'errors' => $e->errors()
+                'message' => $e->errors()
             ]);
         };
         
@@ -38,11 +38,13 @@ class JWTAuthController extends Controller{
 
         // responding
         return response()->json([
+            'message' => 'Login Successfull',
             'token' => $token,
             'user' => JWTAuth::user(),
         ],201);
     }
 
+######################################################################
     public function signup(Request $request){
         try{
             $request->validate([
@@ -53,11 +55,14 @@ class JWTAuthController extends Controller{
                 'password' => 'required|string|min:6',
                ]);
         }catch(\Illuminate\Validation\ValidationException $e){
-            return response()->json(['errors' => $e->errors()], 422);
+            return response()->json(['error' => $e->errors()], 422);
         }
         
         // checking if user already registered 
         $emailExists = User::where('email',$request->email)->exists();
+
+        // add checking method if username exists onchange
+        // $username_taken
         
         if($emailExists){
         return response()->json([
@@ -87,11 +92,15 @@ class JWTAuthController extends Controller{
         
      }
 
+######################################################################
+
     public function logout(){
         JWTAuth::invalidate(JWTAuth::getToken());
 
         return response()->json(['message' => 'Successfully logged out'],200);
     }
+
+######################################################################
 
     public function delete_user(Request $request){
         try{
@@ -117,8 +126,9 @@ class JWTAuthController extends Controller{
                 'message'=>'incorrect password'
             ],401);
         }
-
     }
+
+######################################################################
 
     public function block_user(Request $request){
         $request->validate([
@@ -141,5 +151,12 @@ class JWTAuthController extends Controller{
         }
 
     }
-    
+######################################################################
+
+    public function resetPassword(Request $request){
+        $request->validate([
+            'email'=>'required|email'
+        ])
+        
+    }
 }
