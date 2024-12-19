@@ -13,12 +13,14 @@ class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $resetLink; //property to hold hold reset link     
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($resetLink)
     {
-        //
+        $this->resetLink = $resetLink;
     }
 
     /**
@@ -27,7 +29,7 @@ class ResetPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Mail',
+            subject: 'Reset Your Password',
         );
     }
 
@@ -37,7 +39,7 @@ class ResetPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            
         );
     }
 
