@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Mail\ResetPasswordMail;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -175,5 +176,13 @@ class JWTAuthController extends Controller{
             ['email' => $request->email],
             ['token' => Hash::make($token), 'expires_at' => $expiresAt, 'used' => false]
         );
-    }
+
+        // reset base link
+        $resetLink = url('/reset-password?token=' . $token);
+
+        // Send the reset link via email
+        Mail::to($request->email)->send(new ResetPasswordMail($resetLink));
+
+        return response()->json(['message' => 'Password reset link sent successfully.']);
+        }
 }
