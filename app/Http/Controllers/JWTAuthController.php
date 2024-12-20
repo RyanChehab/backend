@@ -7,7 +7,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\ResetPasswordMail;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class JWTAuthController extends Controller{
@@ -156,9 +159,9 @@ class JWTAuthController extends Controller{
 ######################################################################
 
     public function resetPassword(Request $request){
-        $request->validate([
-            'email'=>'required|email'
-        ]);
+        // $request->validate([
+        //     'email'=>'required|email'
+        // ]);
         $user = new User();
 
         $user = User::where('email',$request->email)->first();
@@ -173,16 +176,20 @@ class JWTAuthController extends Controller{
 
         // ~ 
         DB::table('password_resets')->updateOrInsert(
-            ['email' => $request->email],
-            ['token' => Hash::make($token), 'expires_at' => $expiresAt, 'used' => false]
+            ['email' => $request->email], // Match email
+            [
+                'token' => $token,
+                'expires_at' => $expiresAt,
+                'used' => false
+            ]
         );
 
         // reset base link
         $resetLink = url('/reset-password?token=' . $token);
-
+        
         // Send the reset link via email
         Mail::to($request->email)->send(new ResetPasswordMail($resetLink));
 
-        return response()->json(['message' => 'Password reset link sent successfully.']);
+        return response()->json(['message' => 'Password reset link sent successfully.'],201);
         }
 }
