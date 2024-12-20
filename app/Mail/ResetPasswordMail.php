@@ -23,33 +23,22 @@ class ResetPasswordMail extends Mailable
         $this->resetLink = $resetLink;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function build()
     {
-        return new Envelope(
-            subject: 'Reset Your Password',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        return $this
+            ->subject('Reset Your Password') // Set the email subject
+            ->html("
+                <html>
+                    <head>
+                        <title>Reset Password</title>
+                    </head>
+                    <body>
+                        <p>Hello,</p>
+                        <p>Click the link below to reset your password:</p>
+                        <p><a href='{$this->resetLink}'>{$this->resetLink}</a></p>
+                        <p>If you did not request this, please ignore this email.</p>
+                    </body>
+                </html>
+            "); // Inline HTML email content
     }
 }
