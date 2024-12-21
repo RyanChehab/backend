@@ -21,6 +21,7 @@ class PopulateBooksController extends Controller{
             $books = $this->$gutenbergService->fetchBooks();
 
             foreach ($books as $book){
+
                 if(!in_array('en',$book['languages']?? [])){
                     continue;
                 }
@@ -32,5 +33,19 @@ class PopulateBooksController extends Controller{
         }catch(){
 
         }
+    }
+
+    private function determinCategory(array $bookshelves):string{
+        
+        $bookshelves = [
+            "Best Books Ever Listings",
+            "Browsing: Crime/Mystery",
+            "Browsing: Fiction",
+            "Browsing: Literature",
+            "Browsing: Psychiatry/Psychology",
+            "Crime Fiction",
+            "Harvard Classics"
+        ];
+        
     }
 }
