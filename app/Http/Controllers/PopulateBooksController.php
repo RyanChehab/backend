@@ -37,20 +37,22 @@ class PopulateBooksController extends Controller{
 
     private function determinCategory(array $bookshelves):string{
         
-        $categories = [
-            'fiction' => 'Fiction',
-            'nonfiction' => 'Non-Fiction',
-            'mystery' => 'Mystery',
-            'fantasy' => 'Fantasy',
-            'science' => 'Science',
-            'history' => 'History',
-            'psychology' => 'Psychology',
-            'crime' => 'Crime',
-            'literature' => 'Literature',
+        $keywords = [
+            'fiction',
+            'nonfiction',
+            'mystery',
+            'fantasy',
+            'science',
+            'history',
+            'psychology',
+            'crime',
+            'literature',
         ];
 
         $matchedCategories = [];
 
-        foreach($bookshelves as)
+        foreach($bookshelves as $shelf){
+            foreach($categories as $keyword= >$category)
+        }
     }
 }
