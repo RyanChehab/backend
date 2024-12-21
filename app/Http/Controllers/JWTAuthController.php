@@ -188,8 +188,11 @@ class JWTAuthController extends Controller{
         $resetLink = url('/reset-password?token=' . $token);
         
         // Send the reset link via email
-        Mail::to($request->email)->send(new ResetPasswordMail($resetLink));
-
-        return response()->json(['message' => 'Password reset link sent successfully.'],201);
+        try {
+            Mail::to($user->email)->send(new ResetPasswordMail($resetLink));
+            return response()->json(['message' => 'Password reset link sent successfully.'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
         }
 }
