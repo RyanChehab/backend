@@ -14,10 +14,11 @@ Class GutenbergService{
     ]);
 
     if ($response->failed()) {
-        throw new Exception('Failed to fetch data from the Gutenberg API.');
+        throw new \Exception('Failed to fetch data from the Gutenberg API.');
     }
 
     $books = $response->json('results');
 
+    return array_slice($books,0,$limit);
     }
 }
