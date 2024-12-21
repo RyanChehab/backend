@@ -14,17 +14,21 @@ Class GutenbergService{
 
     while (count($books) < $limit){
         $response = Http::get($this->baseUrl, [
-            'sort' => 'download_count'
+            'sort' => 'download_count',
+            'page' => $page,
         ]);
-    }
-    
 
     if ($response->failed()) {
         throw new \Exception('Failed to fetch data from the Gutenberg API.');
     }
 
-    $books = $response->json('results');
+    $data = $response->json();
+    $books = array_merge($books, $data['results']);
 
+    }
+
+    $page++;
+  
     return array_slice($books,0,$limit);
     }
 }
