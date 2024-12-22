@@ -13,7 +13,7 @@ Route::post('/login',[JWTAuthController::class, 'login']);
 
 Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
 
-// Blocking user 
+// Blocking user
 Route::middleware(AdminMiddleware::class)->group(function(){
     Route::post('/block_user',[JWTAuthController::class, 'block_user']);
 });

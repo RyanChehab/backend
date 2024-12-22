@@ -26,7 +26,7 @@ class ResetPasswordMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Reset Your Password') // Set the email subject
+            ->subject('Reset Your Password') 
             ->html("
                 <html>
                     <head>
@@ -36,9 +36,8 @@ class ResetPasswordMail extends Mailable
                         <p>Hello,</p>
                         <p>Click the link below to reset your password:</p>
                         <p><a href='{$this->resetLink}'>{$this->resetLink}</a></p>
-                        <p>If you did not request this, please ignore this email.</p>
                     </body>
                 </html>
-            "); // Inline HTML email content
+            "); 
     }
 }
