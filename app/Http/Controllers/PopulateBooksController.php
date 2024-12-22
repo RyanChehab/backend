@@ -11,9 +11,7 @@ class PopulateBooksController extends Controller{
     protected $gutenbergService;
 
     public function __construct(GutenbergService $gutenbergService){
-
         $this->gutenbergService = $gutenbergService;
-    
     }
 
     public function populate(){
@@ -32,7 +30,7 @@ class PopulateBooksController extends Controller{
                     ['gutenberg_id' => $book['id']],
                 [
                     'title' => $book['title'],
-                    'author' => $book['authors']
+                    'author' => $book['authors'],
                     'category' => $category, 
                     'full_text_url' => $book['formats'],
                     'image_url' => $book['formats'],
@@ -41,8 +39,8 @@ class PopulateBooksController extends Controller{
                 ]
                 );
             }
-        }catch(){
-
+        }catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
@@ -65,11 +63,11 @@ class PopulateBooksController extends Controller{
         foreach($bookshelves as $shelf){
             foreach ($keywords as $keyword) {
                 if (stripos($shelf,$keyword)!== false){
-                    $matchedCategories[] = ucfirst($keyword)
+                    $matchedCategories[] = ucfirst($keyword);
                 }
             }
-    }
-
-    return implode(', ', array_unique($matchedCategories));
+        }
+        return implode(', ', array_unique($matchedCategories));
+    }  
 
 }
