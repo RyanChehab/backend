@@ -16,7 +16,7 @@ class PopulateBooksController extends Controller{
 
     public function populate(){
         try{
-            $books = $this->$gutenbergService->fetchBooks();
+            $books = $this->gutenbergService->fetchBooks();
 
             foreach ($books as $book){
 
@@ -43,7 +43,7 @@ class PopulateBooksController extends Controller{
             return response()->json(['message' => 'Books table populated successfully!'], 200);
 
         }catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['errorrr' => $e->getMessage()], 500);
         }
     }
 
