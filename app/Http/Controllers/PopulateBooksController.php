@@ -78,7 +78,9 @@ class PopulateBooksController extends Controller{
 
     private function getUrl(array $formats){
         foreach ($formats as $formatKey => $fromatUrl){
-            
+            if(str_starts_with($formatKey, 'text/plain')){
+                return $formatUrl;
+            }
         }
     }
 
