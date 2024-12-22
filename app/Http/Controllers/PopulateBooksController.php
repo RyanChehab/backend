@@ -28,7 +28,18 @@ class PopulateBooksController extends Controller{
 
                 $category = $this->determinCategory($book[bookshelves]);
 
-                Book::updateOrCreate();
+                Book::updateOrCreate(
+                    ['gutenberg_id' => $book['id']],
+                [
+                    'title' => $book['title'],
+                    'author' => $book['authors']
+                    'category' => $category, 
+                    'full_text_url' => $book['formats'],
+                    'image_url' => $book['formats'],
+                    'downloads' => $book['download_count'],
+                    'featured' => true, 
+                ]
+                );
             }
         }catch(){
 
@@ -52,7 +63,13 @@ class PopulateBooksController extends Controller{
         $matchedCategories = [];
 
         foreach($bookshelves as $shelf){
-            foreach($categories as $keyword= >$category)
-        }
+            foreach ($keywords as $keyword) {
+                if (stripos($shelf,$keyword)!== false){
+                    $matchedCategories[] = ucfirst($keyword)
+                }
+            }
     }
+
+    return implode(', ', array_unique($matchedCategories));
+
 }
