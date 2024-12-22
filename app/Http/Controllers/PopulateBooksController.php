@@ -26,12 +26,15 @@ class PopulateBooksController extends Controller{
 
                 $category = $this->determinCategory($book['bookshelves']);
 
+                $author = $book['authors'][0]['name']?? 'Unknown',
+
+
                 Book::updateOrCreate(
                     ['gutenberg_id' => $book['id']],
                 [
                     'title' => $book['title'],
-                    'author' => $book['authors'][0]['name']?? 'Unknown',
-                    'category' => $category, 
+                    'author' => $author,
+                    'category' => $category,
                     'full_text_url' => $book['formats'],
                     'image_url' => $book['formats'],
                     'downloads' => $book['download_count'],
@@ -72,5 +75,11 @@ class PopulateBooksController extends Controller{
         }
         return implode(', ', array_unique($matchedCategories));
     }  
+
+    private function getUrl(array $formats){
+        foreach ($formats as $formatKey => $fromatUrl){
+            
+        }
+    }
 
 }
