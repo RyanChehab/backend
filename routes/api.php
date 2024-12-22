@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\JWTAuthController;
+use App\Http\Controllers\PopulateBooksController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
 Route::post('/signup',[JWTAuthController::class, 'signup']);
@@ -12,6 +13,8 @@ Route::post('/signup',[JWTAuthController::class, 'signup']);
 Route::post('/login',[JWTAuthController::class, 'login']);
 
 Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
+
+Route::post('/populate', [PopulateBooksController::class, 'populate']);
 
 // Blocking user
 Route::middleware(AdminMiddleware::class)->group(function(){
