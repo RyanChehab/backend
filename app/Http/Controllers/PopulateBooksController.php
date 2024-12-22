@@ -24,13 +24,13 @@ class PopulateBooksController extends Controller{
                     continue;
                 }
 
-                $category = $this->determinCategory($book[bookshelves]);
+                $category = $this->determinCategory($book['bookshelves']);
 
                 Book::updateOrCreate(
                     ['gutenberg_id' => $book['id']],
                 [
                     'title' => $book['title'],
-                    'author' => $book['authors'],
+                    'author' => $book['authors'][0]['name']?? 'Unknown',
                     'category' => $category, 
                     'full_text_url' => $book['formats'],
                     'image_url' => $book['formats'],
