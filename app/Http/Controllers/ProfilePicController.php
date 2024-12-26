@@ -8,11 +8,20 @@ class ProfilePicController extends Controller
 {
     public function upload(Request $request){
 
-        $request->validate([
-            'profile_pic' => 'required|file|mimes:jpg,jpeg,png|max:2048', // 2MB max
-        ]);
+        try{
+            $request->validate([
+                'profile_pic' => 'required|file|mimes:jpg,jpeg,png|max:2048', // 2MB max
+            ]);
+        }catch(Illuminate\Validation\ValidationException $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+        
 
         $file = $request->file('profile_pic');
-        
+
     }
 }
