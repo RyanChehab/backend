@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilePicController extends Controller{
     public function upload(Request $request){
@@ -12,7 +14,7 @@ class ProfilePicController extends Controller{
                 'profile_pic' => 'required|file|mimes:jpg,jpeg,png|max:2048', // 2MB max
             ]);
     
-            $user = JWT::parseToken()->authenticate();
+            $user = JWTAuth::parseToken()->authenticate();
 
             if (!$user) {
                 return response()->json([
@@ -40,7 +42,7 @@ class ProfilePicController extends Controller{
                 'success' => true,
                 'message' => 'Profile picture uploaded successfully',
                 'url' => $url,
-            ]);
+            ],200);
         }catch (\Illuminate\Validation\ValidationException $e) {
         // Handle validation errors
         return response()->json([
