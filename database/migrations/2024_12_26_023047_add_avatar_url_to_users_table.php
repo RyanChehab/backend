@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->longText('avatar_url');
+            $table->longText('avatar_url')->nullable();
         });
     }
 
