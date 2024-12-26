@@ -29,7 +29,7 @@ class ProfilePicController extends Controller{
 
             // identify the type of storage
             $disk = Storage::disk('s3');
-            $disk->put($filePath,file_get_contents($file));
+            $disk->put($filePath,file_get_contents($file),'public');
 
             // get the url from cloud
             $url = $disk->url($filePath);
