@@ -19,9 +19,18 @@ class ProfilePicController extends Controller
                 'errors' => $e->errors(),
             ], 422);
         }
-        
 
+        $user = JWT::parseToken()->authenticate();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+        
         $file = $request->file('profile_pic');
 
+        $filePath = 'ProfilePics/'. uniqid() . '.' .$file->getClientOriginalExtension();
     }
 }
