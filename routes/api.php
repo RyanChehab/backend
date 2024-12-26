@@ -8,9 +8,11 @@ use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\PopulateBooksController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
-Route::post('/signup',[JWTAuthController::class, 'signup']);
+Rout::group(['prefix' => 'auth'],function(){
+    Route::post('/signup',[JWTAuthController::class, 'signup']);
+    Route::post('/login',[JWTAuthController::class, 'login']);
+});
 
-Route::post('/login',[JWTAuthController::class, 'login']);
 
 Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
 
@@ -31,3 +33,4 @@ Route::middleware(JWTMiddleware::class)->group(function(){
 //     Mail::to('test@example.com')->send(new \App\Mail\ResetPasswordMail('http://example.com/reset-password?token=12345'));
 //     return 'Email sent!';
 // });
+
