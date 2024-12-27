@@ -13,7 +13,7 @@ Class BookimageService{
         $books=Book::whereNull('img_url')->get();
 
         foreach($books as $book){
-            $book->img_url = $this->$route;
+            $book->img_url = $this->route;
             $book->save();
         }
     }
