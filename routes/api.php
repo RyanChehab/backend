@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\JWTAuthController;
+use App\Http\Controllers\GetBooksController;
 use App\Http\Controllers\ProfilePicController;
 use App\Http\Controllers\PopulateBooksController;
 use Illuminate\Support\Facades\Mail;
@@ -34,8 +35,6 @@ Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
 Route::post('/populate', [PopulateBooksController::class, 'populate']);
 
 Route::post('/imgPopulate', [PopulateBooksController::class, 'addPlaceHolderImg']);
-// Route::get('/test-email', function () {
-//     Mail::to('test@example.com')->send(new \App\Mail\ResetPasswordMail('http://example.com/reset-password?token=12345'));
-//     return 'Email sent!';
-// });
+
+Route::post('/getFeaturedBooks', [GetBooksController::class, 'getFeaturedBooks']);
 
