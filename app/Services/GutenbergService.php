@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 Class GutenbergService{
     protected $baseUrl =  'https://gutendex.com/books/';
 
-    public function fetchBooks(int $limit = 16):array{
+    public function fetchBooks(int $limit = 20):array{
     
     $books =[];
     $page = 1;
