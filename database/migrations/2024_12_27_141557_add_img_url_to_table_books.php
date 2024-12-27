@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('table_books', function (Blueprint $table) {
+        Schema::table('books', function (Blueprint $table) {
             $table->LongText('img_url')->after('useCount')->nullable();
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('table_books', function (Blueprint $table) {
+        Schema::table('books', function (Blueprint $table) {
             $table->dropColumn('img_url');
         });
     }
