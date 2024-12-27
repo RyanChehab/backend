@@ -11,9 +11,10 @@ class PopulateBooksController extends Controller{
     
     protected $gutenbergService;
     protected $BookimageService;
-    
+
     public function __construct(GutenbergService $gutenbergService, BookimageService $BookimageService){
         $this->gutenbergService = $gutenbergService;
+        $this->BookimageService = $BookimageService;
     }
 
     public function populate(){
@@ -97,5 +98,11 @@ class PopulateBooksController extends Controller{
 #############################################################################
                                     // Add imgs
 
-    public 
+    public function addPlaceHolderimg(){
+
+        $this->BookimageService->addPlaceHolderImg();
+
+        return response()->json(['message'=>'Books updated with imgs']);
+
+    }
 }
