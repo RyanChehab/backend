@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Services\GutenbergService;
+use App\Services\BookimageService;  
 
 class PopulateBooksController extends Controller{
     
     protected $gutenbergService;
-
-    public function __construct(GutenbergService $gutenbergService){
+    protected $BookimageService;
+    
+    public function __construct(GutenbergService $gutenbergService, BookimageService $BookimageService){
         $this->gutenbergService = $gutenbergService;
     }
 
@@ -92,5 +94,8 @@ class PopulateBooksController extends Controller{
 
         return $urlText;
     }
+#############################################################################
+                                    // Add imgs
 
+    public 
 }
