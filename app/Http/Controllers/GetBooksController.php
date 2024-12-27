@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class GetBooksController extends Controller{
     public function getFeaturedBooks():JsonResponse{
-        $featuredBooks = Book::where('featured', 1)->get();
+        $featuredBooks = Book::where('featured', 1)->select('id','title','author','img_url','category', 'url_text')->get();
 
         return response()->json($featuredBooks);
     }
