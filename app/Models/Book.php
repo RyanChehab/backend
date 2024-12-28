@@ -18,4 +18,9 @@ class Book extends Model{
         'featured',
         'used',
     ];
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
+    }
 }
