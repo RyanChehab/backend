@@ -100,8 +100,14 @@ class JWTAuthController extends Controller{
 ######################################################################
 
     public function logout(){
-        JWTAuth::invalidate(JWTAuth::getToken());
-
+        try{
+            JWTAuth::invalidate(JWTAuth::getToken());
+        }catch(\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
+            return response()->json(['message' => 'Token was invalid, but logout was successful'], 200);
+        }catch(Illuminate\JWTAuth\Exception $e){
+            return response()->json(['message'=>'Token is missing, but logout was successfull']);
+        }
+        
         return response()->json(['message' => 'Successfully logged out'],200);
     }
 
