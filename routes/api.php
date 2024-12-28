@@ -15,6 +15,7 @@ use App\Mail\ResetPasswordMail;
 Route::group(['prefix' => 'auth'],function(){
     Route::post('/signup',[JWTAuthController::class, 'signup']);
     Route::post('/login',[JWTAuthController::class, 'login']);
+    Route::post('/logout',[JWTAuthController::class, 'logout']);
 });
 
 // Blocking user
@@ -24,7 +25,6 @@ Route::middleware(AdminMiddleware::class)->group(function(){
 
 // Deleting user and logingout
 Route::middleware(JWTMiddleware::class)->group(function(){
-    Route::post('/logout',[JWTAuthController::class, 'logout']);
     Route::post('delete_user',[JWTAuthController::class, 'delete_user']);
 });
 
