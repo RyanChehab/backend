@@ -43,4 +43,14 @@ class BookmarksController extends Controller{
         return response()->json(['message' => 'Bookmark added', 'status' => true], 201);
         }
     }
+
+    public function getUserBookmarks()
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+
+        // Fetch all bookmarks for the user
+        $bookmarks = Bookmark::where('user_id', $user->id)->get();
+
+        return response()->json($bookmarks, 200);
+    }
 }
