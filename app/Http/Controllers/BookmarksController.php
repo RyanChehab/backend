@@ -28,6 +28,14 @@ class BookmarksController extends Controller{
             ->where('bookmarkable_id', $request->bookmarkable_id)
             ->where('bookmarkable_type', $request->bookmarkable_type)
             ->first();
+            
+        if ($bookmark) {
+            // If it exists, remove it
+            $bookmark->delete();
+            return response()->json(['message' => 'Bookmark removed', 'status' => false], 200);
+        } else {
+            // If it doesn't exist, add it
+            Bookmark::create
 
     }
 }
