@@ -27,7 +27,8 @@ Route::middleware(AdminMiddleware::class)->group(function(){
 
 // Deleting user and logingout
 Route::middleware(JWTMiddleware::class)->group(function(){
-Route::post('/getBookmarks', [BookmarksController::class, 'toggleBookmark']);
+    Route::post('/getBookmarks', [BookmarksController::class, 'getUserBookmarks']);
+    Route::post('/bookmark', [BookmarksController::class, 'toggleBookmark']);
 });
 
 Route::post('upload', [ProfilePicController::class, 'upload']);
