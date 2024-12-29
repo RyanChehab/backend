@@ -19,6 +19,7 @@ class Book extends Model{
         'used',
     ];
 
+    // initiate the polymorph rlnt
     public function bookmarks()
     {
         return $this->morphMany(Bookmark::class, 'bookmarkable');

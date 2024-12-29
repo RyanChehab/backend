@@ -44,8 +44,7 @@ class BookmarksController extends Controller{
         }
     }
 
-    public function getUserBookmarks()
-    {
+    public function getUserBookmarks(){
         $user = JWTAuth::parseToken()->authenticate();
 
         // Fetch all bookmarks for the user
