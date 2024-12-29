@@ -7,7 +7,8 @@ use App\Models\Bookmark;
 use App\Models\Book;
 
 class BookmarksController extends Controller{
-    public function addBookmark(Request $request)
+
+    public function toggleBookmark(Request $request)
     {
         $request->validate([
             'bookmarkable_id' => 'required|integer',
@@ -22,5 +23,11 @@ class BookmarksController extends Controller{
                 'message' => 'User not authenticated',
             ], 401);
         }
+
+        $existingBookmark = Bookmark::where('user_id', $user->id)
+            ->where('bookmarkable_id', $request->bookmarkable_id)
+            ->where('bookmarkable_type', $request->bookmarkable_type)
+            ->first();
+
     }
 }
