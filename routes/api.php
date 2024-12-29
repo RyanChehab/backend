@@ -6,6 +6,7 @@ use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\GetBooksController;
+use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\ProfilePicController;
 use App\Http\Controllers\PopulateBooksController;
 use Illuminate\Support\Facades\Mail;
@@ -21,11 +22,12 @@ Route::group(['prefix' => 'auth'],function(){
 // Blocking user
 Route::middleware(AdminMiddleware::class)->group(function(){
     Route::post('/block_user',[JWTAuthController::class, 'block_user']);
+    Route::post('delete_user',[JWTAuthController::class, 'delete_user']);
 });
 
 // Deleting user and logingout
 Route::middleware(JWTMiddleware::class)->group(function(){
-    Route::post('delete_user',[JWTAuthController::class, 'delete_user']);
+Route::post('/getBookmarks', [BookmarksController::class, 'toggleBookmark']);
 });
 
 Route::post('upload', [ProfilePicController::class, 'upload']);
