@@ -8,8 +8,7 @@ use App\Models\Book;
 
 class BookmarksController extends Controller{
 
-    public function toggleBookmark(Request $request)
-    {
+    public function toggleBookmark(Request $request){
         $request->validate([
             'bookmarkable_id' => 'required|integer',
             'bookmarkable_type' => 'required|string',
@@ -28,14 +27,20 @@ class BookmarksController extends Controller{
             ->where('bookmarkable_id', $request->bookmarkable_id)
             ->where('bookmarkable_type', $request->bookmarkable_type)
             ->first();
-            
+
         if ($bookmark) {
             // If it exists, remove it
             $bookmark->delete();
             return response()->json(['message' => 'Bookmark removed', 'status' => false], 200);
         } else {
             // If it doesn't exist, add it
-            Bookmark::create
+        Bookmark::create([
+            'user_id' => $user->id,
+            'bookmarkable_id' => $request->bookmarkable_id,
+            'bookmarkable_type' => $request->bookmarkable_type,
+        ]);
 
+        return response()->json(['message' => 'Bookmark added', 'status' => true], 201);
+        }
     }
 }
