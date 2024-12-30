@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -22,14 +23,20 @@ class GetBooksController extends Controller{
     }
 
     public function showbook($gutenberg_id){
-        
+        // get the book 
         $book = Book::where('gutenberg_id', $gutenberg_id)->first();
 
         if(!$book){
             return response()->json(['error' => 'Book not found'],404);
         }
+        // get the book api 
+        $url = $book->url_text;
+        
+        try{
 
-        $content = $book->url_text;
-        return response()->json($content);
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Failed to retrieve book content', 'details' => $e->getMessage()], 500);
+        }
     }
+
 }
