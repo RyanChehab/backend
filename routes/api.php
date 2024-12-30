@@ -25,7 +25,7 @@ Route::middleware(AdminMiddleware::class)->group(function(){
     Route::post('delete_user',[JWTAuthController::class, 'delete_user']);
 });
 
-// Deleting user and logingout
+// Bookmarks
 Route::middleware(JWTMiddleware::class)->group(function(){
     Route::post('/getBookmarks', [BookmarksController::class, 'getUserBookmarks']);
     Route::post('/bookmark', [BookmarksController::class, 'toggleBookmark']);
@@ -41,3 +41,4 @@ Route::post('/imgPopulate', [PopulateBooksController::class, 'addPlaceHolderImg'
 
 Route::post('/getFeaturedBooks', [GetBooksController::class, 'getFeaturedBooks']);
 
+Route::get('/showBook/{gutenberg_id}', [GetBooksController::class, 'showbook']);
