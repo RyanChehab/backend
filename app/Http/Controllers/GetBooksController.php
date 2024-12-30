@@ -31,12 +31,17 @@ class GetBooksController extends Controller{
         }
         // get the book api 
         $url = $book->url_text;
+
+        $client = new Client();
         
         try{
-
+            $response = $client->get(trim($url)); 
+            $content = $response->getBody()->getContents();
         }catch(\Exception $e){
             return response()->json(['error' => 'Failed to retrieve book content', 'details' => $e->getMessage()], 500);
         }
-    }
 
+    return response()->json(['content' => $content]);
+
+    }
 }
