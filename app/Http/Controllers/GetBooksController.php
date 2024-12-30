@@ -21,11 +21,15 @@ class GetBooksController extends Controller{
         return response()->json($featuredBooks);
     }
 
-    public function showbook(Request $gutenberg_id){
+    public function showbook($gutenberg_id){
+        
         $book = Book::where('gutenberg_id', $gutenberg_id)->first();
 
         if(!$book){
             return response()->json(['error' => 'Book not found'],404);
         }
+
+        $content = $book->url_text;
+        return response()->json($content);
     }
 }
