@@ -41,13 +41,14 @@ class GetBooksController extends Controller{
                 }
 
                 $result[$category][] = [
-                    'id' => $book->id,
                     'title' => $book->title,
-                    'description' => $book->description,
+                    'gutenberg_id' => $book->gutenberg_id,
+                    'img_url' => $book->img_url,
+                    'author' => $book->author,
                 ];
             }
             return response()->json($result, 200);
-            
+
         }catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch books'], 500);
         }
