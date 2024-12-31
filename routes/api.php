@@ -42,3 +42,5 @@ Route::post('/imgPopulate', [PopulateBooksController::class, 'addPlaceHolderImg'
 Route::post('/getFeaturedBooks', [GetBooksController::class, 'getFeaturedBooks']);
 
 Route::get('/showBook/{gutenberg_id}', [GetBooksController::class, 'showbook']);
+
+Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
