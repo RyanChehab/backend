@@ -16,7 +16,13 @@ class RepositoryController extends Controller{
             'story_url' => 'nullable|url',
         ]);
 
+        $repository = new Repository();
 
+        return response()->json([
+            'success' => true,
+            'message' => 'Repository created successfully!',
+            'data' => $repository,
+        ], 201);
     }
 
 }
