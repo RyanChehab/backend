@@ -19,6 +19,10 @@ class Book extends Model{
         'used',
     ];
 
+    protected $casts = [
+        'categories' => 'array', // Automatically array
+    ];
+
     // initiate the polymorph rlnt
     public function bookmarks()
     {
