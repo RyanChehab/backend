@@ -22,19 +22,23 @@ class GetBooksController extends Controller{
         return response()->json($featuredBooks);
     }
 
-    public function getBookByCategory(){
-        try {
-            $books = Book::all();
-    
-            $result = [];
-    
-            foreach ($books as $book) {
-                // Filter out "Literature" from categories
-                $filteredCategories = collect($book->categories)
-                    ->filter(fn($category) => trim($category) !== 'Literature')
-                    ->values();
-            }
+    public function getBookByCategory()
+{
+    try {
+        $books = Book::all(); 
+        $result = [];
 
+        foreach ($books as $book) {
+            // Split categories
+            $categories = explode(',', $book->category ?? '');
+            $filteredCategories = collect($categories)
+                // Remove whitespace
+                ->map(fn($category) => trim($category)) 
+                
+                ->filter(fn($category) => $category !== 'Literature' && $category !== '') 
+                ->values();
+
+            // Populate the result array with books under each valid category
             foreach ($filteredCategories as $category) {
                 if (!isset($result[$category])) {
                     $result[$category] = [];
@@ -47,12 +51,19 @@ class GetBooksController extends Controller{
                     'author' => $book->author,
                 ];
             }
-            return response()->json($result, 200);
-
-        }catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch books'], 500);
         }
+
+        // If result is empty, return a message
+        if (empty($result)) {
+            return response()->json(['message' => 'No books found for the given criteria'], 404);
+        }
+
+        return response()->json($result, 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to fetch books', 'details' => $e->getMessage()], 500);
     }
+}
 
     public function showbook($gutenberg_id){
         // get the book 
