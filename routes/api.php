@@ -38,7 +38,7 @@ Route::post('upload', [ProfilePicController::class, 'upload']);
 Route::group(['prefix' => 'book'],function(){
 
     Route::post('/populate', [PopulateBooksController::class, 'populate']);
-    
+
     Route::post('/imgPopulate', [PopulateBooksController::class, 'addPlaceHolderImg']);
 
     Route::post('/getFeaturedBooks', [GetBooksController::class, 'getFeaturedBooks']);
@@ -46,6 +46,6 @@ Route::group(['prefix' => 'book'],function(){
     Route::get('/showBook/{gutenberg_id}', [GetBooksController::class, 'showbook']);
 
     Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
-})
+});
 
 
