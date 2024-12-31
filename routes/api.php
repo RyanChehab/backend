@@ -17,6 +17,8 @@ Route::group(['prefix' => 'auth'],function(){
     Route::post('/signup',[JWTAuthController::class, 'signup']);
     Route::post('/login',[JWTAuthController::class, 'login']);
     Route::post('/logout',[JWTAuthController::class, 'logout']);
+    Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
+
 });
 
 // Blocking user
@@ -33,14 +35,17 @@ Route::middleware(JWTMiddleware::class)->group(function(){
 
 Route::post('upload', [ProfilePicController::class, 'upload']);
 
-Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
+Route::group(['prefix' => 'book'],function(){
 
-Route::post('/populate', [PopulateBooksController::class, 'populate']);
+    Route::post('/populate', [PopulateBooksController::class, 'populate']);
+    
+    Route::post('/imgPopulate', [PopulateBooksController::class, 'addPlaceHolderImg']);
 
-Route::post('/imgPopulate', [PopulateBooksController::class, 'addPlaceHolderImg']);
+    Route::post('/getFeaturedBooks', [GetBooksController::class, 'getFeaturedBooks']);
 
-Route::post('/getFeaturedBooks', [GetBooksController::class, 'getFeaturedBooks']);
+    Route::get('/showBook/{gutenberg_id}', [GetBooksController::class, 'showbook']);
 
-Route::get('/showBook/{gutenberg_id}', [GetBooksController::class, 'showbook']);
+    Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
+})
 
-Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
+
