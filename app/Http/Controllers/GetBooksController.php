@@ -22,6 +22,21 @@ class GetBooksController extends Controller{
         return response()->json($featuredBooks);
     }
 
+    public function getBookByCategory(){
+        try {
+            $books = Book::all();
+    
+            $result = [];
+    
+            foreach ($books as $book) {
+                // Filter out "Literature" from categories
+                $filteredCategories = collect($book->categories)
+                    ->filter(fn($category) => trim($category) !== 'Literature')
+                    ->values();
+            }
+        }
+    }
+    
     public function showbook($gutenberg_id){
         // get the book 
         $book = Book::where('gutenberg_id', $gutenberg_id)->first();
@@ -35,13 +50,34 @@ class GetBooksController extends Controller{
         $client = new Client();
         
         try{
-            $response = $client->get(trim($url)); 
-            $content = $response->getBody()->getContents();
+            $response = $client->get(trim($url),[
+                'stream' => true, //stream the book
+                'read_timeout'=> 0,
+            ]);
+            $rawContent = $response->getBody()->getContents();
         }catch(\Exception $e){
             return response()->json(['error' => 'Failed to retrieve book content', 'details' => $e->getMessage()], 500);
         }
 
+        $cleanContent = $this->cleanBookContent($rawContent);
+
     return response()->json(['content' => $content]);
 
     }
+
+    private function cleanBookContent($content){
+    // Remove the metadata at the start
+    $content = preg_replace('/\*\*\* START OF THIS PROJECT GUTENBERG EBOOK.*?\*\*\*/s', '', $content);
+
+    // Remove the metadata at the end
+    $content = preg_replace('/\*\*\* END OF THIS PROJECT GUTENBERG EBOOK.*?/s', '', $content);
+
+    // Remove the table of contents section
+    $content = preg_replace('/CONTENTS.*?(Chapter|Letter|Part|Section)\s+\d+/si', '', $content);
+
+    return trim($content);
+
+
+}
+
 }
