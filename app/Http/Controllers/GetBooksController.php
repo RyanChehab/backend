@@ -34,9 +34,25 @@ class GetBooksController extends Controller{
                     ->filter(fn($category) => trim($category) !== 'Literature')
                     ->values();
             }
+
+            foreach ($filteredCategories as $category) {
+                if (!isset($result[$category])) {
+                    $result[$category] = [];
+                }
+
+                $result[$category][] = [
+                    'id' => $book->id,
+                    'title' => $book->title,
+                    'description' => $book->description,
+                ];
+            }
+            return response()->json($result, 200);
+            
+        }catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch books'], 500);
         }
     }
-    
+
     public function showbook($gutenberg_id){
         // get the book 
         $book = Book::where('gutenberg_id', $gutenberg_id)->first();
