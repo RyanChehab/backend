@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\AdminMiddleware;
@@ -8,9 +10,8 @@ use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\GetBooksController;
 use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\ProfilePicController;
+use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\PopulateBooksController;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ResetPasswordMail;
 
 //Auth
 Route::group(['prefix' => 'auth'],function(){
@@ -35,6 +36,7 @@ Route::middleware(JWTMiddleware::class)->group(function(){
 
 Route::post('upload', [ProfilePicController::class, 'upload']);
 
+// Book routes
 Route::group(['prefix' => 'book'],function(){
 
     Route::post('/populate', [PopulateBooksController::class, 'populate']);
@@ -48,4 +50,7 @@ Route::group(['prefix' => 'book'],function(){
     Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
 });
 
-
+// Repository routes
+Route::group(['prefix'=>'Repository'],function(){
+    Route::post('createRepo',[RepositoryController::class, 'createRepository']);
+});
