@@ -163,14 +163,49 @@ class JWTAuthController extends Controller{
                     'message'=>"User {$user->name} blocked"
                 ],200);
             }
-
     }
 ######################################################################
     public function AddAdmin(Request $request){
-        $request->validate([
-            "email"=>"email|required|string",
-            "password"=>"min:6|required|string"
-        ])
+
+        try{
+            $request->validate([
+                "email"=>"email|required|string",
+                "password"=>"min:6|required|string"
+            ]);
+        }catch(\Illuminate\Validation\ValidationException $e){
+            return response()->json(['error' => $e->errors()], 422);
+        }
+
+        // checking if user already registered 
+        $emailExists = User::where('email',$request->email)->exists();
+
+        if($emailExists){
+        return response()->json([
+            "message" => 'User already registered'
+        ],409);
+        }
+
+        // creating admin acc
+        $user = new User();
+
+        $user->name =$request->name;
+        $user->username =$request->username;
+        $user->email =$request->email;
+        $user->user_type =$request->user_type;
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        //generating jwt 
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json([
+        'message' => 'Admin created successfully',
+        'user' => $user,
+        'token' => $token,
+    ], 201);
+
+
     }
 ######################################################################
 
