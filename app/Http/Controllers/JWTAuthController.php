@@ -203,9 +203,7 @@ class JWTAuthController extends Controller{
         'message' => 'Admin created successfully',
         'user' => $user,
         'token' => $token,
-    ], 201);
-
-
+        ], 201);
     }
 ######################################################################
 
