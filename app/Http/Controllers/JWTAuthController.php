@@ -146,23 +146,31 @@ class JWTAuthController extends Controller{
     public function block_user(Request $request){
         $request->validate([
             'email'=> 'required|email',
-            'password'=> 'required|string'
+            'password'=> 'required|string|min:6'
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if(Hash::check($request->password,$user->password)){
-            $user->blocked= true;
-            $user->save();
-            return response()->json([
-                'message'=>'User blocked'
-            ],200);
 
-        }else{
-            return response()->json([
-                'message'=>'incorrect password'
-            ],401);
-        }
+            if(!$user){
+                return response()->json([
+                    'message'=>'User not found'
+                ],404);
 
+            }else{
+                $user->blocked= true;
+                $user->save();
+                return response()->json([
+                    'message'=>"User {$user->name} blocked"
+                ],200);
+            }
+
+    }
+######################################################################
+    public function AddAdmin(Request $request){
+        $request->validate([
+            "email"=>"email|required|string",
+            "password"=>"min:6|required|string"
+        ])
     }
 ######################################################################
 
