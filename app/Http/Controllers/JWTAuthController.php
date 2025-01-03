@@ -173,6 +173,18 @@ public function Unblock_user(Request $request){
 
     $user = User::where('email', $request->email)->first();
 
+    if(!$user){
+        return response()->json([
+            'message'=>'User not found'
+        ],404);
+
+    }else{
+        $user->blocked= false;
+        $user->save();
+        return response()->json([
+            'message'=>"User {$user->name} unblocked"
+        ],200);
+    }
 }
 
 ######################################################################
