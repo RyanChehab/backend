@@ -26,6 +26,7 @@ Route::group(['prefix' => 'auth'],function(){
 Route::middleware(AdminMiddleware::class)->group(function(){
     Route::post('/AddAdmin', [JWTAuthController::class, 'AddAdmin']);
     Route::post('/block_user',[JWTAuthController::class, 'block_user']);
+    Route::post('/unblock_user',[JWTAuthController::class, 'Unblock_user']);
     Route::post('/delete_user',[JWTAuthController::class, 'delete_user']);
 });
 
