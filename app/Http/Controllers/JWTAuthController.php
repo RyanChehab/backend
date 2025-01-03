@@ -146,7 +146,6 @@ class JWTAuthController extends Controller{
     public function block_user(Request $request){
         $request->validate([
             'email'=> 'required|email',
-            'password'=> 'required|string|min:6'
         ]);
 
         $user = User::where('email', $request->email)->first();
