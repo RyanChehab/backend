@@ -19,7 +19,7 @@ Route::group(['prefix' => 'auth'],function(){
     Route::post('/login',[JWTAuthController::class, 'login']);
     Route::post('/logout',[JWTAuthController::class, 'logout']);
     Route::post('/reset', [JWTAuthController::class, 'resetPassword']);
-
+    Route::post('/getUsers', [JWTAuthController::class, 'getAllUsers']);
 });
 
 // Blocking user
