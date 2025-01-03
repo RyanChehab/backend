@@ -169,8 +169,11 @@ class JWTAuthController extends Controller{
 
         try{
             $request->validate([
-                "email"=>"email|required|string",
-                "password"=>"min:6|required|string"
+                'name' => 'required|string|max:255',
+                'username' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'user_type'=>'required',
+                'password' => 'required|string|min:6',
             ]);
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json(['error' => $e->errors()], 422);
@@ -205,6 +208,7 @@ class JWTAuthController extends Controller{
         'token' => $token,
         ], 201);
     }
+    
 ######################################################################
 
     public function resetPassword(Request $request){
@@ -244,4 +248,14 @@ class JWTAuthController extends Controller{
             return response()->json(['error' => $e->getMessage()], 500);
         }
         }
+
+    public function getAllUsers(){
+        
+        $users = User::all();
+
+        return response()->json([
+            'message' => 'success',
+            'data' => $users,
+        ],200); 
+    }
 }
