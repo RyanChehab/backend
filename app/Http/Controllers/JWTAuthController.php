@@ -163,7 +163,20 @@ class JWTAuthController extends Controller{
                 ],200);
             }
     }
+
 ######################################################################
+
+public function Unblock_user(Request $request){
+    $request->validate([
+        'email'=> 'required|email',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+}
+
+######################################################################
+
     public function AddAdmin(Request $request){
 
         try{
