@@ -119,7 +119,6 @@ class JWTAuthController extends Controller{
         try{
             $request->validate([
                 'email' => 'required|string|email|max:255',
-                'password' => 'required|string|min:6',
             ]);
         }catch(\Illuminate\Validation\ValidationException $e){
             return response()->json([
@@ -129,14 +128,15 @@ class JWTAuthController extends Controller{
 
         $user = User::where('email',$request->email)->first();
 
-        if (Hash::check($request->password, $user->password)){
+        if ($user){
             $user->delete();
             return response()->json([
+                "success"=> true,
                 'message'=>'user deleted successfully'
             ],200);
         }else{
             return response()->json([
-                'message'=>'incorrect password'
+                'message'=>'user not found'
             ],401);
         }
     }
