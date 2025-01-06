@@ -65,4 +65,9 @@ class User extends Authenticatable implements JWTSubject{
         return $this->hasMany(Bookmark::class);
         
     }
+
+    // each user has many repositories 
+    public function repositories(){
+        return $this->hasMany(Repository::class);
+    }
 }
