@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('repositories', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->after("story_url");
         });
     }
 
