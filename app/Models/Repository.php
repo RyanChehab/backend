@@ -19,4 +19,8 @@ class Repository extends Model{
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function users(){
+        return $this->belongTo(User::class);
+    }
 }
