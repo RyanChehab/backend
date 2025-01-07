@@ -27,12 +27,37 @@ class RepositoryController extends Controller{
         }
 
         $repository = new Repository();
+        $repository->title = $validatedData['title'];
+        $repository->description = $validatedData['description'] ?? null;
+        $repository->img_url = $validatedData['img_url'] ?? null;
+        $repository->story_url = $validatedData['story_url'] ?? null;
+        $repository->user_id = $user->id;
+        $repository->save(); 
 
         return response()->json([
             'success' => true,
             'message' => 'Repository created successfully!',
             'data' => $repository,
         ], 201);
+    }
+
+    public function getRepositories($id){
+        try {
+            $user = auth()->user();
+
+            $repositories = $user->repositories;
+    
+            return response()->json([
+                'success' => true,
+                'repositories' => $repositories,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch repositories',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
 }
