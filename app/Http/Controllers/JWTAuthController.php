@@ -194,9 +194,7 @@ public function Unblock_user(Request $request){
         try{
             $request->validate([
                 'name' => 'required|string|max:255',
-                'username' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
-                'user_type'=>'required',
                 'password' => 'required|string|min:6',
             ]);
         }catch(\Illuminate\Validation\ValidationException $e){
@@ -208,7 +206,7 @@ public function Unblock_user(Request $request){
 
         if($emailExists){
         return response()->json([
-            "message" => 'User already registered'
+            "message" => 'Admin already registered'
         ],409);
         }
 
@@ -216,20 +214,18 @@ public function Unblock_user(Request $request){
         $user = new User();
 
         $user->name =$request->name;
-        $user->username =$request->username;
+        $user->username ="admin";
         $user->email =$request->email;
         $user->user_type =$request->user_type;
         $user->password = Hash::make($request->password);
 
         $user->save();
 
-        //generating jwt 
-        $token = JWTAuth::fromUser($user);
-
+        $users = User::all();
         return response()->json([
         'message' => 'Admin created successfully',
         'user' => $user,
-        'token' => $token,
+        'users' => $users,
         ], 201);
     }
     
