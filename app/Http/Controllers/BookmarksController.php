@@ -2,46 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use App\Models\Bookmark;
 use App\Models\Book;
 
 class BookmarksController extends Controller{
 
-    public function toggleBookmark(Request $request){
+    public function bookmark(Request $request){
         $request->validate([
-            'bookmarkable_id' => 'required|integer',
-            'bookmarkable_type' => 'required|string',
+            'bookmarkable_type'=>'required',
+            'bookmarkable_id' => 'required|integer'
         ]);
 
         $user = JWTAuth::parseToken()->authenticate();
 
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User not authenticated',
-            ], 401);
-        }
-
-        $existingBookmark = Bookmark::where('user_id', $user->id)
+        $exists = Bookmark::where('userable_id', $user->id)
+            ->where('userable_type', get_class($user))
             ->where('bookmarkable_id', $request->bookmarkable_id)
             ->where('bookmarkable_type', $request->bookmarkable_type)
-            ->first();
+            ->exists();
 
-        if ($bookmark) {
-            // If it exists, remove it
-            $bookmark->delete();
-            return response()->json(['message' => 'Bookmark removed', 'status' => false], 200);
-        } else {
-            // If it doesn't exist, add it
-        Bookmark::create([
-            'user_id' => $user->id,
+        if ($exists) {
+            return response()->json(['message' => 'Bookmark already exists!'], 400);
+        }
+
+        $bookmark = Bookmark::create([
+            'userable_id' => $user->id,
+            'userable_type' => get_class($user),
             'bookmarkable_id' => $request->bookmarkable_id,
             'bookmarkable_type' => $request->bookmarkable_type,
         ]);
 
-        return response()->json(['message' => 'Bookmark added', 'status' => true], 201);
-        }
+        return response()->json(['message' => 'Bookmark added successfully!', 'bookmark' => $bookmark], 201);
     }
 
     public function getUserBookmarks(){
