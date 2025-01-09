@@ -41,7 +41,7 @@ class RepositoryController extends Controller{
         ], 201);
     }
 
-    public function getRepositories($id){
+    public function getRepositories(){
         try {
             $user = auth()->user();
 
@@ -54,8 +54,7 @@ class RepositoryController extends Controller{
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch repositories',
-                'error' => $e->getMessage(),
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
