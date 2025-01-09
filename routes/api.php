@@ -31,11 +31,11 @@ Route::middleware(AdminMiddleware::class)->group(function(){
 });
 
 // Bookmarks
-Route::group(['prefix' => 'bookmark'],function(){
+Route::group(['prefix' => 'bookmarks'],function(){
 
     Route::post('/bookmark',[BookmarksController::class, 'bookmark']);
     Route::post('/unbookmark',[BookmarksController::class, 'removeBookmark']);
-    Route::post('/getbookmarks', [BookmarksController::class], 'getBookmarks');
+    Route::post('/getBookmarks',[BookmarksController::class, 'getBookmarks']);
 
 });
 

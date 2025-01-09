@@ -16,7 +16,8 @@ class PopulateBooksController extends Controller{
         $this->gutenbergService = $gutenbergService;
         $this->BookimageService = $BookimageService;
     }
-
+    
+    // populate database
     public function populate(){
         try{
             $books = $this->gutenbergService->fetchBooks();
