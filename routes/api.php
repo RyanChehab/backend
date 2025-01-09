@@ -5,7 +5,9 @@ use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JWTMiddleware;
+use App\Http\Controllers\AiController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\WriterMiddleware;
 use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\GetBooksController;
 use App\Http\Controllers\BookmarksController;
@@ -58,4 +60,8 @@ Route::group(['prefix' => 'book'],function(){
 // Repository routes
 Route::group(['prefix'=>'Repository'],function(){
     Route::post('createRepo',[RepositoryController::class, 'createRepository']);
+});
+
+Route::middleware(WriterMiddleware::class)->group(function(){
+    Route::post('generate-image',[AiController::class,'generateImage']);
 });
