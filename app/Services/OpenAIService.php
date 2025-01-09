@@ -16,6 +16,18 @@ class OpenAiService{
     }
 
     public function generateImg(string $promt, string $size = '400x300'): array{
-        
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$this->apiKey}",
+            'Content-Type' => 'application/json',
+        ])->post("{$this->baseUrl}/v1/images/generations", [
+            'prompt' => $prompt,
+            'size' => $size,
+        ]);
+
+        if($response->successful()){
+            return $response->json();
+        }
+
+        throw new \Exception('Failed to generate image: ' . $response->body());
     }
 }
