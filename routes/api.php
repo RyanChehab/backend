@@ -22,7 +22,7 @@ Route::group(['prefix' => 'auth'],function(){
     Route::post('/getUsers', [JWTAuthController::class, 'getAllUsers']);
 });
 
-// Blocking user
+// Admin
 Route::middleware(AdminMiddleware::class)->group(function(){
     Route::post('/AddAdmin', [JWTAuthController::class, 'AddAdmin']);
     Route::post('/block_user',[JWTAuthController::class, 'block_user']);
@@ -31,10 +31,10 @@ Route::middleware(AdminMiddleware::class)->group(function(){
 });
 
 // Bookmarks
-Route::middleware(JWTMiddleware::class)->group(function(){
-    Route::post('/getBookmarks', [BookmarksController::class, 'getUserBookmarks']);
-    Route::post('/bookmark', [BookmarksController::class, 'toggleBookmark']);
-});
+// Route::middleware(JWTMiddleware::class)->group(function(){
+//     Route::post('/getBookmarks', [BookmarksController::class, 'getUserBookmarks']);
+//     Route::post('/bookmark', [BookmarksController::class, 'toggleBookmark']);
+// });
 
 Route::post('upload', [ProfilePicController::class, 'upload']);
 
@@ -56,3 +56,6 @@ Route::group(['prefix' => 'book'],function(){
 Route::group(['prefix'=>'Repository'],function(){
     Route::post('createRepo',[RepositoryController::class, 'createRepository']);
 });
+
+Route::post('/bookmark',[BookmarksController::class, 'bookmark']);
+Route::post('/unbookmark',[BookmarksController::class, 'removeBookmark']);
