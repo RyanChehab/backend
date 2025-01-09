@@ -62,7 +62,7 @@ class User extends Authenticatable implements JWTSubject{
     // each user has many bookmarks
     public function bookmarks(){
 
-        return $this->hasMany(Bookmark::class);
+        return $this->morphMany(Bookmark::class, 'userable');
         
     }
 
