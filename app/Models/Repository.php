@@ -23,4 +23,10 @@ class Repository extends Model{
     public function users(){
         return $this->belongTo(User::class);
     }
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
+    }
+    
 }
