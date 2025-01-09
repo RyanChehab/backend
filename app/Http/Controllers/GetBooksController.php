@@ -12,7 +12,7 @@ class GetBooksController extends Controller{
     public function getFeaturedBooks():JsonResponse{
         $featuredBooks = Book::where('featured', 1)->select('id','gutenberg_id','title','author','img_url','category', 'url_text')->get()->mapWithKeys(function ($book) {
             return [$book->id => [
-                'gutenber_id' => $book->gutenberg_id,
+                'gutenberg_id' => $book->gutenberg_id,
                 'title' => $book->title,
                 'author' => $book->author,
                 'img_url' => $book->img_url,
