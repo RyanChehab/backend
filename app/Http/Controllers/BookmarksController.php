@@ -37,12 +37,34 @@ class BookmarksController extends Controller{
         return response()->json(['message' => 'Bookmark added successfully!', 'bookmark' => $bookmark], 201);
     }
 
-    public function getUserBookmarks(){
+    public function removeBookmark(Request $request){
+    
         $user = JWTAuth::parseToken()->authenticate();
 
-        // Fetch all bookmarks for the user
-        $bookmarks = Bookmark::where('user_id', $user->id)->get();
+        $request->validate([
+            'bookmarkable_type' => 'required|string',
+            'bookmarkable_id' => 'required|integer',
+        ]);
 
-        return response()->json($bookmarks, 200);
+        $deleted = Bookmark::where('userable_id', $user->id)
+            ->where('userable_type', get_class($user))
+            ->where('bookmarkable_id', $request->bookmarkable_id)
+            ->where('bookmarkable_type', $request->bookmarkable_type)
+            ->delete();
+
+        if ($deleted) {
+            return response()->json(['message' => 'Bookmark removed successfully!'], 200);
+        }
+
+        return response()->json(['message' => 'Bookmark not found.'], 404);
     }
 }
+
+    // public function getUserBookmarks(){
+    //     $user = JWTAuth::parseToken()->authenticate();
+
+    //     // Fetch all bookmarks for the user
+    //     $bookmarks = Bookmark::where('user_id', $user->id)->get();
+
+    //     return response()->json($bookmarks, 200);
+    // }
