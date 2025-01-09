@@ -9,8 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Writer{
 
-    public function handle(Request $request, Closure $next): Response
-    {
+    public function handle(Request $request, Closure $next): Response{
         try{
             $user = JWTAuth::parseToken()->authenticate();
             if($user->user_type !== 'writer'){
@@ -20,7 +19,20 @@ class Writer{
                 ], 403);
             }
             return $next($request);
-        }catch(TokenExpiredException $e)
-       
+        }catch(TokenExpiredException $e){
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid token. Please log in again.'
+        ], 401);
+    } catch (Exception $e) {
+        // Handle missing token
+        return response()->json([
+            'success' => false,
+            'message' => 'Token is required. Please log in.'
+        ], 401);
+    }
+
+    return $next($request);
     }
 }
+
