@@ -58,13 +58,13 @@ class BookmarksController extends Controller{
 
         return response()->json(['message' => 'Bookmark not found.'], 404);
     }
+
+    public function getBookmarks(){
+        $user = JWTAuth::parseToken()->authenticate();
+
+        $bookmarks = Bookmark::where('userable_id', $user->id)->where('userable_type', get_class($user))->pluck('bookmarkable_id');
+
+        return response()->json(['bookmarked_ids' => $bookmarks]);
+    }
+
 }
-
-    // public function getUserBookmarks(){
-    //     $user = JWTAuth::parseToken()->authenticate();
-
-    //     // Fetch all bookmarks for the user
-    //     $bookmarks = Bookmark::where('user_id', $user->id)->get();
-
-    //     return response()->json($bookmarks, 200);
-    // }
