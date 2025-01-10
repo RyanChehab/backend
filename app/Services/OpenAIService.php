@@ -2,32 +2,31 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use Exception;
+use OpenAI;
+
 
 class OpenAiService{
 
-    protected $baseUrl;
-    protected $apiKey;
+    public function generateImg(string $prompt, string $size = '1024x1024'){
+        $key = env('OPENAI_API_KEY');
+        $client = OpenAI::client($key);
 
-    public function __construct(){
-
-        $this->baseUrl = env('OPENAI_BASE_URL', 'https://api.openai.com');
-        $this->apiKey = env('OPENAI_API_KEY');
-    }
-
-    public function generateImg(string $promt, string $size = '400x300'): array{
-        $response = Http::withHeaders([
-            'Authorization' => "Bearer {$this->apiKey}",
-            'Content-Type' => 'application/json',
-        ])->post("{$this->baseUrl}/v1/images/generations", [
-            'prompt' => $prompt,
-            'size' => $size,
-        ]);
-
-        if($response->successful()){
-            return $response->json();
+        try{
+            $result = $client->images()->create([
+                'model' => 'dall-e-3',
+                'prompt' => $prompt,
+                'n' => 1,
+                'size' => $size,
+                'response_format' => 'url',
+            ]);
+    
+            $urls = array_map(fn($data) => $data['url'], $result['data']);
+    
+            return $urls;
+        }catch(\Exception $e){
+            throw new \Exception('img generation failed: '. $e->getMessage());
         }
-
-        throw new \Exception('Failed to generate image: ' . $response->body());
+        
     }
 }
