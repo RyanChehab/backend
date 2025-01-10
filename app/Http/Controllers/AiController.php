@@ -37,14 +37,20 @@ class AiController extends Controller{
                 // stored img temporarly in local file
                 $tempFilePath = storage_path('app/temp/' . uniqid() . '.png');
 
-                $response->save($tempFilePath);
+                file_put_contents($tempFilePath, $response->body());
 
                 // upload to s3
                 $disk = Storage::disk('s3');
                 $disk->put($filePath,file_get_contents($tempFilePath),'public');
 
+                if (!$disk->exists($filePath)) {
+                    throw new \Exception('Failed to upload the image to S3.');
+                }
+
                 // get the public url from s3
                 $s3url = $disk->url($filePath);
+
+                unlink($tempFilePath);
 
             // when image uploaded get the url of the object from aws
             return response()->json([
