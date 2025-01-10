@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\OpenAIService;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class AiController extends Controller{
 
@@ -15,61 +16,62 @@ class AiController extends Controller{
         $this->openAIService = $openAIService;
     }
 
-    public function generateImage(Request $request){
+    public function generateAndStoreImage(Request $request)
+{
+    // Validate the input
+    $validated = $request->validate([
+        'prompt' => 'required|string',
+    ]);
 
-        $validated = $request->validate([
-            'prompt' => 'required|string',
-        ]);
-        
-        try{
-            $imageData = $this->openAIService->generateImg($validated['prompt']);
+    try {
+        // Initialize the OpenAI service
+        $openAiService = new OpenAiService();
 
-            // accessing the image url generated
-            $imageUrl = $imageData[0];
-            // downloaded the image
-            $response = Http::get($imageUrl);
+        // Generate the image using the provided prompt
+        $imageUrls = $openAiService->generateImg($validated['prompt']);
 
-            if ($response->successful()) {
-                
-                $folder = 'RepositoryCovers';
-                $filePath = $folder . '/' .uniqid() . '.png';
-
-                // stored img temporarly in local file
-                $tempFilePath = storage_path('app/temp/' . uniqid() . '.png');
-
-                file_put_contents($tempFilePath, $response->body());
-
-                // upload to s3
-                $disk = Storage::disk('s3');
-                $disk->put($filePath,file_get_contents($tempFilePath),'public');
-
-                if (!$disk->exists($filePath)) {
-                    throw new \Exception('Failed to upload the image to S3.');
-                }
-
-                // get the public url from s3
-                $s3url = $disk->url($filePath);
-
-                unlink($tempFilePath);
-
-            // when image uploaded get the url of the object from aws
-            return response()->json([
-                'success' => true,
-                's3url' => $s3url,
-            ],201);
-
-            }
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to download the generated image.',
-            ], 500);
-
-        }catch(\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+        // Validate the response
+        if (empty($imageUrls) || !isset($imageUrls[0])) {
+            throw new \Exception('No image URL returned from OpenAI.');
         }
+
+        // Get the first image URL
+        $imageUrl = $imageUrls[0];
+
+        // Download the image content
+        $response = Http::get($imageUrl);
+        if (!$response->successful()) {
+            throw new \Exception('Failed to download the generated image.');
+        }
+
+        // Define S3 folder and file path
+        $folder = 'RepositoryCovers';
+        $fileName = uniqid() . '.png';
+        $filePath = $folder . '/' . $fileName;
+        
+        // Upload the image to S3
+        $disk = Storage::disk('s3');
+        $uploaded = $disk->put($filePath, $response->body());
+
+        if (!$uploaded) {
+            throw new \Exception('Failed to upload the image to S3.');
+        }
+
+        // Get the public S3 URL
+        $s3url = $disk->url($filePath);
+
+        // Return the permanent S3 URL
+        return response()->json([
+            'success' => true,
+            's3url' => $s3url,
+        ], 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage(),
+        ], 500);
     }
+}
+
 }
