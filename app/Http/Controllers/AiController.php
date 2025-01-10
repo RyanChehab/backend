@@ -26,13 +26,23 @@ class AiController extends Controller{
 
             // accessing the image url generated
             $imageUrl = $imageData[0];
+            // downloaded the image
             $response = Http::get($imageUrl);
 
             if ($response->successful()) {
                 // Resize the image
                 $resizedImage = Image::make($response->body())->resize(300, 400);
-    
                 
+                $folder = 'RepositoryCovers';
+                $filePath = $folder . '/' .uniqid() . '.png';
+                
+                // stored img temporarly in local file
+                $tempFilePath = storage_path('app/temp/' . uniqid() . '.png');
+                $resizedImage->save($tempFilePath);
+
+                // upload to s3
+                $disk = Storage::disk('s3');
+                $disk->put($filePath,file_get_contents($tempFilePath),'public');
             }
 
             return response()->json([
