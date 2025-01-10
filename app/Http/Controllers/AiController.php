@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\OpenAIService;
 use Illuminate\Support\Facades\Http;
-use Intervention\Image\Facades\Image;
+
 
 class AiController extends Controller{
 
@@ -30,25 +30,35 @@ class AiController extends Controller{
             $response = Http::get($imageUrl);
 
             if ($response->successful()) {
-                // Resize the image
-                $resizedImage = Image::make($response->body())->resize(300, 400);
                 
                 $folder = 'RepositoryCovers';
                 $filePath = $folder . '/' .uniqid() . '.png';
-                
+
                 // stored img temporarly in local file
                 $tempFilePath = storage_path('app/temp/' . uniqid() . '.png');
-                $resizedImage->save($tempFilePath);
+
+                $response->save($tempFilePath);
 
                 // upload to s3
                 $disk = Storage::disk('s3');
                 $disk->put($filePath,file_get_contents($tempFilePath),'public');
-            }
 
+                // get the public url from s3
+                $s3url = $disk->url($filePath);
+
+            // when image uploaded get the url of the object from aws
             return response()->json([
                 'success' => true,
-                'data' => $imageData,
+                's3url' => $s3url,
             ],201);
+
+            }
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to download the generated image.',
+            ], 500);
+
         }catch(\Exception $e) {
             return response()->json([
                 'success' => false,
