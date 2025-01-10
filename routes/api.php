@@ -63,5 +63,5 @@ Route::group(['prefix'=>'Repository'],function(){
 });
 
 Route::middleware(WriterMiddleware::class)->group(function(){
-    Route::post('generate-image',[AiController::class,'generateImage']);
+    Route::post('generate-image',[AiController::class,'generateAndStoreImage']);
 });
