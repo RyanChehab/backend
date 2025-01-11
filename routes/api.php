@@ -57,11 +57,8 @@ Route::group(['prefix' => 'book'],function(){
     Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
 });
 
-// Repository routes
-Route::group(['prefix'=>'Repository'],function(){
-    Route::post('createRepo',[RepositoryController::class, 'createRepository']);
-});
-
 Route::middleware(WriterMiddleware::class)->group(function(){
+    Route::post('createRepo',[RepositoryController::class, 'createRepository']);
     Route::post('generate-image',[AiController::class,'generateAndStoreImage']);
+    Route::post('updateRepo/{id}', [RepositoryController::class, 'updateRepository']);
 });
