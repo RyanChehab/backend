@@ -58,7 +58,12 @@ Route::group(['prefix' => 'book'],function(){
 });
 
 Route::middleware(WriterMiddleware::class)->group(function(){
+
     Route::post('createRepo',[RepositoryController::class, 'createRepository']);
+
     Route::post('generate-image',[AiController::class,'generateAndStoreImage']);
+    
     Route::post('updateRepo/{id}', [RepositoryController::class, 'updateRepository']);
+
+    Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
 });
