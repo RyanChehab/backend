@@ -69,7 +69,9 @@ Route::middleware(WriterMiddleware::class)->group(function(){
     Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
 });
 
-Route::group(['prefix => fiction'],function(){
+Route::middleware(WriterMiddleware::class)->group(function(){
 
-    Route::post('/storeFiction' , [FictionController::class , 'storeFiction']);
+    Route::post('/storeFiction/{id}' , [FictionController::class , 'storeFiction']);
+
+    Route::get('/getFiction/{id}', [FictionController::class,'getFiction']);
 });
