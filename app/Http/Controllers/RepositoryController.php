@@ -41,10 +41,27 @@ class RepositoryController extends Controller{
         ], 201);
     }
 
-    public function updateRepository(Request $request){
+    public function updateRepository(Request $request,$id){
+
         $validated = $request->validate([
             's3url' => 'required'
         ]);
+        
+        try{
+            $repository = Repository::findOrFail($id);
+
+            $repository->update([
+                'img_url' => $validated['s3url'],
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Repository updated successfully.',
+                'repository' => $repository,
+            ], 200);
+        }catch(\Exception $e){
+
+        }
     }
 
     public function getRepositories(){
