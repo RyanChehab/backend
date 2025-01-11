@@ -59,8 +59,12 @@ class RepositoryController extends Controller{
                 'message' => 'Repository updated successfully.',
                 'repository' => $repository,
             ], 200);
+            
         }catch(\Exception $e){
-
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update repository: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
