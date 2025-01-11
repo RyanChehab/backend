@@ -24,6 +24,12 @@ class FictionController extends Controller{
                 'message' => 'Fiction stored successfully!',
                 'url' => Storage::disk('s3')->url($filePath), // Public URL of the file
             ], 200);
+
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to store fiction: ' . $e->getMessage(),
+            ], 500);                
         }
 
     }
