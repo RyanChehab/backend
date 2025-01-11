@@ -32,13 +32,19 @@ class RepositoryController extends Controller{
         $repository->img_url = $validatedData['img_url'] ?? null;
         $repository->story_url = $validatedData['story_url'] ?? null;
         $repository->user_id = $user->id;
-        $repository->save(); 
+        $repository->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Repository created successfully!',
             'data' => $repository,
         ], 201);
+    }
+
+    public function updateRepository(Request $request){
+        $validated = $request->validate([
+            's3url' => 'required'
+        ]);
     }
 
     public function getRepositories(){
