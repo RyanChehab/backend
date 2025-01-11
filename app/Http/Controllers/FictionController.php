@@ -14,7 +14,7 @@ class FictionController extends Controller{
         ]);
 
         try{
-            $filename = 'repository_{$id}.txt';
+            $filename = "repository_{$id}.txt";
             $filePath = "Fictions/{$filename}";
 
             Storage::disk('s3')->put($filePath, $validated['content']);
@@ -32,5 +32,34 @@ class FictionController extends Controller{
             ], 500);                
         }
 
+    }
+
+    public function getFiction($id){
+        try {
+            // Define the file path
+            $fileName = "repository_{$id}.txt";
+            $filePath = "Fictions/{$fileName}";
+    
+            // Check if the file exists
+            if (!Storage::disk('s3')->exists($filePath)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Fiction not found.',
+                ], 404);
+            }
+    
+            // Get the fiction
+            $content = Storage::disk('s3')->get($filePath);
+    
+            return response()->json([
+                'success' => true,
+                'content' => $content,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch fiction: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
