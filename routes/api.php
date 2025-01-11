@@ -9,6 +9,7 @@ use App\Http\Controllers\AiController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\WriterMiddleware;
 use App\Http\Controllers\JWTAuthController;
+use App\Http\controllers\FictionController;
 use App\Http\Controllers\GetBooksController;
 use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\ProfilePicController;
@@ -66,4 +67,9 @@ Route::middleware(WriterMiddleware::class)->group(function(){
     Route::post('updateRepo/{id}', [RepositoryController::class, 'updateRepository']);
 
     Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
+});
+
+Route::group(['prefix => fiction'],function(){
+
+    Route::post('/storeFiction' , [FictionController::class , 'storeFiction']);
 });
