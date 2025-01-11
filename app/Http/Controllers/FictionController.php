@@ -15,7 +15,7 @@ class FictionController extends Controller{
 
         try{
             $filename = 'repository_{$id}.txt';
-            $filePath = "Fiction/{$filename}";
+            $filePath = "Fictions/{$filename}";
 
             Storage::disk('s3')->put($filePath, $validated['content']);
 
