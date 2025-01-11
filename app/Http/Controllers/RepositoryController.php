@@ -41,6 +41,7 @@ class RepositoryController extends Controller{
         ], 201);
     }
 
+    // insert the generated img
     public function updateRepository(Request $request,$id){
 
         $validated = $request->validate([
@@ -68,12 +69,15 @@ class RepositoryController extends Controller{
         }
     }
 
+    // fetch all repositories for a specific writer 
     public function getRepositories(){
         try {
-            $user = auth()->user();
+            $user = JWTAuth::parseToken()->authenticate();
 
-            $repositories = $user->repositories;
-    
+            $id = $user->id;
+            
+            $repositories = Repository::where('user_id', $id)->get();
+            
             return response()->json([
                 'success' => true,
                 'repositories' => $repositories,
