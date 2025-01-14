@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 
-class Writer{
+class WriterMiddleware{
 
     public function handle(Request $request, Closure $next): Response{
         try{
