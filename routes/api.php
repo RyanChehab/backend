@@ -15,6 +15,7 @@ use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\ProfilePicController;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\PopulateBooksController;
+use App\Http\Controllers\GutenBergController;
 
 //Auth
 Route::group(['prefix' => 'auth'],function(){
@@ -56,8 +57,11 @@ Route::group(['prefix' => 'book'],function(){
     Route::get('/showBook/{gutenberg_id}', [GetBooksController::class, 'showbook']);
 
     Route::post('/BookCategories',[GetBooksController::class, 'getBookByCategory']);
+
+    Route::post('/fetchBookContent', [GutenBergController::class, 'fetchBookContent']);
 });
 
+// repositories
 Route::middleware(WriterMiddleware::class)->group(function(){
 
     Route::post('createRepo',[RepositoryController::class, 'createRepository']);
@@ -69,6 +73,7 @@ Route::middleware(WriterMiddleware::class)->group(function(){
     Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
 });
 
+// fanfiction
 Route::middleware(WriterMiddleware::class)->group(function(){
 
     Route::post('/storeFiction/{id}' , [FictionController::class , 'storeFiction']);
