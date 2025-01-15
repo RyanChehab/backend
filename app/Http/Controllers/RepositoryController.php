@@ -69,6 +69,12 @@ class RepositoryController extends Controller{
         }
     }
 
+    // delete repo
+    public function deleteRepo($id){
+        $repo = Repository::findOrFail($id);
+        
+    }
+
     // fetch all repositories for a specific writer 
     public function getRepositories(){
         try {
@@ -89,5 +95,9 @@ class RepositoryController extends Controller{
             ], 500);
         }
     }
+
+    // public function deleteRepositroy($id){
+
+    // }
 
 }
