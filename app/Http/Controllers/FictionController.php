@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,4 +64,20 @@ class FictionController extends Controller{
             ], 500);
         }
     }
+
+    
+    // delete repo
+    public function deleteRepo($id){
+        $repo = Repository::findOrFail($id);
+
+        $repo->delete();
+
+        if($repo){
+            return response()->json([
+                'success'=>true,
+                'message'=> 'deleted repo',
+            ],200);
+        }
+    }
+
 }
