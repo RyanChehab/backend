@@ -69,20 +69,6 @@ class RepositoryController extends Controller{
         }
     }
 
-    // delete repo
-    public function deleteRepo($id){
-        $repo = Repository::findOrFail($id);
-
-        $repo->delete();
-
-        if($repo){
-            return response()->json([
-                'success'=>true,
-                'message'=> 'deleted repo',
-            ],200);
-        }
-    }
-
     // fetch all repositories for a specific writer 
     public function getRepositories(){
         try {
