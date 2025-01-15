@@ -68,7 +68,24 @@ class FictionController extends Controller{
     
     // delete repo
     public function deleteRepo($id){
+
         $repo = Repository::findOrFail($id);
+
+        $filename = "repository_{$id}.txt";
+        $filePath = "Fictions/{$filename}";
+
+        try {
+            if (Storage::disk('s3')->exists($filePath)) {
+                Storage::disk('s3')->delete($filePath);
+            }
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the file from the cloud.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
 
         $repo->delete();
 
