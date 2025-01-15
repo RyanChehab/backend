@@ -78,9 +78,9 @@ Route::middleware(WriterMiddleware::class)->group(function(){
 Route::middleware(WriterMiddleware::class)->group(function(){
 
     Route::post('/storeFiction/{id}' , [FictionController::class , 'storeFiction']);
-
-    Route::get('/getFiction/{id}', [FictionController::class,'getFiction']); 
-
+    
     Route::post('deleteRepo/{id}', [FictionController::class , 'deleteRepo']);
 
 });
+
+Route::get('/getFiction/{id}', [FictionController::class,'getFiction']); 
