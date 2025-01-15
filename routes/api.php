@@ -70,8 +70,6 @@ Route::middleware(WriterMiddleware::class)->group(function(){
     
     Route::post('updateRepo/{id}', [RepositoryController::class, 'updateRepository']);
 
-    Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
-
 });
 
 // fanfiction
@@ -84,3 +82,5 @@ Route::middleware(WriterMiddleware::class)->group(function(){
 });
 
 Route::get('/getFiction/{id}', [FictionController::class,'getFiction']); 
+
+Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
