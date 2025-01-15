@@ -71,6 +71,8 @@ Route::middleware(WriterMiddleware::class)->group(function(){
     Route::post('updateRepo/{id}', [RepositoryController::class, 'updateRepository']);
 
     Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
+
+    Route::post('deleteRepo/{id}', [RepositoryController::class , 'deleteRepo']);
 });
 
 // fanfiction
