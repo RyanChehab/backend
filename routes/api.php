@@ -72,7 +72,6 @@ Route::middleware(WriterMiddleware::class)->group(function(){
 
     Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
 
-    Route::post('deleteRepo/{id}', [RepositoryController::class , 'deleteRepo']);
 });
 
 // fanfiction
@@ -80,5 +79,8 @@ Route::middleware(WriterMiddleware::class)->group(function(){
 
     Route::post('/storeFiction/{id}' , [FictionController::class , 'storeFiction']);
 
-    Route::get('/getFiction/{id}', [FictionController::class,'getFiction']);
+    Route::get('/getFiction/{id}', [FictionController::class,'getFiction']); 
+
+    Route::post('deleteRepo/{id}', [FictionController::class , 'deleteRepo']);
+
 });
