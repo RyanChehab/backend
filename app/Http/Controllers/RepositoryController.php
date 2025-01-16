@@ -74,9 +74,7 @@ class RepositoryController extends Controller{
         try {
             $user = JWTAuth::parseToken()->authenticate();
 
-            $id = $user->id;
-            
-            $repositories = Repository::where('user_id', $id)->get();
+            $repositories = Repository::all();
             
             return response()->json([
                 'success' => true,
