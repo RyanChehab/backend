@@ -87,12 +87,15 @@ class FictionController extends Controller{
             ], 500);
         }
 
+        $repositories = Repository::all(); 
+
         $repo->delete();
 
         if($repo){
             return response()->json([
                 'success'=>true,
                 'message'=> 'deleted repo',
+                'repositories'=> $repositories,
             ],200);
         }
     }
