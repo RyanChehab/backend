@@ -69,12 +69,40 @@ class RepositoryController extends Controller{
         }
     }
 
+    // fetch all repositories
+    public function getReaderRepositories(){
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+
+            $repositories = Repository::all();
+            
+            return response()->json([
+                'success' => true,
+                'repositories' => $repositories,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     // fetch all repositories for a specific writer 
     public function getRepositories(){
         try {
             $user = JWTAuth::parseToken()->authenticate();
 
-            $repositories = Repository::all();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated',
+                ], 401);
+            }
+
+            $id = $user->id;
+            
+            $repositories = Repository::where('user_id', $id)->get();
             
             return response()->json([
                 'success' => true,
