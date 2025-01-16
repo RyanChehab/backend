@@ -84,3 +84,5 @@ Route::middleware(WriterMiddleware::class)->group(function(){
 Route::get('/getFiction/{id}', [FictionController::class,'getFiction']); 
 
 Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
+
+Route::post('getReaderRepositories', [RepositoryController::class, 'getReaderRepositories']);
