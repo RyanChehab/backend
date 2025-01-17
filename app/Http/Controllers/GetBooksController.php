@@ -23,8 +23,7 @@ class GetBooksController extends Controller{
         return response()->json($featuredBooks);
     }
 
-    public function getBookByCategory()
-{
+    public function getBookByCategory(){
     try {
         $books = Book::all(); 
         $result = [];
@@ -50,6 +49,7 @@ class GetBooksController extends Controller{
                     'gutenberg_id' => $book->gutenberg_id,
                     'img_url' => $book->img_url,
                     'author' => $book->author,
+                    'url_text' => $book->url_text,
                 ];
             }
         }
