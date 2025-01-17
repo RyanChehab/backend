@@ -21,7 +21,7 @@ class ChatBotController extends Controller
             $response = $client->chat()->create([
                 'model' => 'gpt-3.5-turbo',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                    ['role' => 'system', 'content' => 'You are an expert storyteller. Your role is to assist writers in developing plots, characters, and scenarios for their stories.'],
                     ['role' => 'user', 'content' => $message],
                 ], 
             ]);
