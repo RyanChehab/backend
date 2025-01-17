@@ -69,7 +69,11 @@ class BookmarksController extends Controller{
         ->where('bookmarkable_type', 'App\\Models\\Repository')
         ->pluck('bookmarkable_id');
 
-        return response()->json(['bookmarked_ids' => $bookmarks]);
+        return response()->json([
+            'bookmarked_books' => $bookmarkedBooks,
+            'bookmarked_repositories' => $bookmarkedRepositories,
+        ]);
+    
     }
 
 }
