@@ -9,14 +9,14 @@ use App\Http\Controllers\AiController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\WriterMiddleware;
 use App\Http\Controllers\JWTAuthController;
+use App\Http\Controllers\ChatBotController;
 use App\Http\controllers\FictionController;
 use App\Http\Controllers\GetBooksController;
 use App\Http\Controllers\BookmarksController;
+use App\Http\Controllers\GutenBergController;
 use App\Http\Controllers\ProfilePicController;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\PopulateBooksController;
-use App\Http\Controllers\GutenBergController;
-
 //Auth
 Route::group(['prefix' => 'auth'],function(){
     Route::post('/signup',[JWTAuthController::class, 'signup']);
@@ -86,3 +86,5 @@ Route::get('/getFiction/{id}', [FictionController::class,'getFiction']);
 Route::post('getRepositories', [RepositoryController::class , 'getRepositories']);
 
 Route::post('getReaderRepositories', [RepositoryController::class, 'getReaderRepositories']);
+
+Route::post('chat', [ChatBotController::class , 'chat']);
