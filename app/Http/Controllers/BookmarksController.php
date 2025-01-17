@@ -62,7 +62,12 @@ class BookmarksController extends Controller{
     public function getBookmarks(){
         $user = JWTAuth::parseToken()->authenticate();
 
-        $bookmarks = Bookmark::where('userable_id', $user->id)->where('userable_type', get_class($user))->pluck('bookmarkable_id');
+        $bookmarkedBooks = Bookmark::where('userable_id', $user->id)->where('userable_type', get_class($user))->where('bookmarkable_type', 'App\\Models\\Book')->pluck('bookmarkable_id');
+
+        $bookmarkedRepositories = Bookmark::where('userable_id', $user->id)
+        ->where('userable_type', get_class($user))
+        ->where('bookmarkable_type', 'App\\Models\\Repository')
+        ->pluck('bookmarkable_id');
 
         return response()->json(['bookmarked_ids' => $bookmarks]);
     }
