@@ -12,10 +12,8 @@ class Bookmark extends Model{
         'bookmarkable_type'
     ];
 
-    // polymorphic relationship to the user 
-    public function userable()
-    {
-        return $this->morphTo();
+    public function user(){
+        $this->belongsTo(User::class);
     }
     // polymorphic relationship to the bookmarkable item  
     public function bookmarkable(){
