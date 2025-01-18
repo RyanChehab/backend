@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Bookmark;
 use App\Models\Book;
@@ -76,4 +77,17 @@ class BookmarksController extends Controller{
     
     }
 
+    public function mostBookmarked(){
+        
+        $mostBookmarkedRepo = DB::table('bookmarks')
+        ->select('bookmarkable_id', DB::raw('COUNT(*) as bookmark_count'))
+        ->where('bookmarkable_type', 'Repository')
+        ->groupBy('bookmarkable_id')
+        ->orderByDesc('bookmark_count')
+        ->first();
+
+        return respone()->json([
+            'repository' => $mostBookmarkedRepo
+        ]);
+    }
 }
