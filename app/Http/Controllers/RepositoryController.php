@@ -14,7 +14,6 @@ class RepositoryController extends Controller{
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'img_url' => 'nullable|url',
-            'story_url' => 'nullable|url',
         ]);
 
         $user = JWTAuth::parseToken()->authenticate();
@@ -30,7 +29,6 @@ class RepositoryController extends Controller{
         $repository->title = $validatedData['title'];
         $repository->description = $validatedData['description'] ?? null;
         $repository->img_url = $validatedData['img_url'] ?? null;
-        $repository->story_url = $validatedData['story_url'] ?? null;
         $repository->user_id = $user->id;
         $repository->save();
 
