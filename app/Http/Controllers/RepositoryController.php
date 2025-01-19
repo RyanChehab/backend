@@ -74,7 +74,11 @@ class RepositoryController extends Controller{
         try {
             $user = JWTAuth::parseToken()->authenticate();
 
-            $repositories = Repository::all();
+            $repositories = Repository::withCount(['bookmarks as bookmark_count' => function ($query) {
+                $query->where('bookmarkable_type', 'App\\Models\\Repository');
+            }])
+            ->orderByDesc('bookmark_count')
+            ->get();
             
             return response()->json([
                 'success' => true,
