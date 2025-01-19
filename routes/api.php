@@ -40,6 +40,7 @@ Route::group(['prefix' => 'bookmarks'],function(){
     Route::post('/bookmark',[BookmarksController::class, 'bookmark']);
     Route::post('/unbookmark',[BookmarksController::class, 'removeBookmark']);
     Route::post('/getBookmarks',[BookmarksController::class, 'getBookmarks']);
+    Route::post('/mostBookmarked', [BookmarksController::class, 'mostBookmarked']);
 
 });
 
