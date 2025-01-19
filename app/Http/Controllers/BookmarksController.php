@@ -81,12 +81,12 @@ class BookmarksController extends Controller{
         
         $mostBookmarkedRepo = DB::table('bookmarks')
         ->select('bookmarkable_id', DB::raw('COUNT(*) as bookmark_count'))
-        ->where('bookmarkable_type', 'Repository')
+        ->where('bookmarkable_type', 'App\\Models\\Repository')
         ->groupBy('bookmarkable_id')
         ->orderByDesc('bookmark_count')
         ->first();
 
-        return respone()->json([
+        return response()->json([
             'repository' => $mostBookmarkedRepo
         ]);
     }
