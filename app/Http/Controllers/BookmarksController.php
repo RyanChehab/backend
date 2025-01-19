@@ -80,9 +80,16 @@ class BookmarksController extends Controller{
     public function mostBookmarked(){
         
         $mostBookmarkedRepo = DB::table('bookmarks')
-        ->select('bookmarkable_id', DB::raw('COUNT(*) as bookmark_count'))
+        ->join('repositories', 'bookmarks.bookmarkable_id', '=', 'repositories.id')
+        ->select(
+            'repositories.id as repository_id',
+            'repositories.title',
+            'repositories.description',
+            'repositories.img_url',
+            DB::raw('COUNT(bookmarks.id) as bookmark_count')
+        )
         ->where('bookmarkable_type', 'App\\Models\\Repository')
-        ->groupBy('bookmarkable_id')
+        ->groupBy('repositories.id', 'repositories.title', 'repositories.description', 'repositories.img_url')
         ->orderByDesc('bookmark_count')
         ->first();
 
